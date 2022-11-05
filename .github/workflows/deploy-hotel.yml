@@ -19,7 +19,7 @@ jobs:
       - uses: digitalocean/action-doctl@v2
         with:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
-      - run: doctl kubernetes cluster kubeconfig save nasddatax
+      - run: doctl kubernetes cluster kubeconfig save hotel-assessment
       - run: kubectl rollout restart deployment hotel-depl
       
       
