@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hotel-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hotel
+  template:
+    metadata:
+      labels:
+        app: hotel
+    spec:
+      containers:
+        - name: hotel
+          image: dimejifash45/hotel
+
+          env:
+            - name: NATS_CLIENT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: NATS_URL
+              value: 'http://nats-srv:4222'
+            - name: NATS_CLUSTER_ID
+              value: HOTEL
+            - name: MONGO_URI
+              value: 'mongodb://hotel-mongo-srv:27017/hotel'
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: JWT_KEY
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hotel-srv
+spec:
+  selector:
+    app: hotel
+  ports:
+    - name: hotel
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
+      
+      
+      
+      
+      
+      
+      
+      

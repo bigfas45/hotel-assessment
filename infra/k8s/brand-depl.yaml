@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: brand-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: brand
+  template:
+    metadata:
+      labels:
+        app: brand
+    spec:
+      containers:
+        - name: brand
+          image: dimejifash45/brand
+
+          env:
+            - name: NATS_CLIENT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: NATS_URL
+              value: 'http://nats-srv:4222'
+            - name: NATS_CLUSTER_ID
+              value: HOTEL
+            - name: MONGO_URI
+              value: 'mongodb://brand-mongo-srv:27017/brand'
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: JWT_KEY
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: brand-srv
+spec:
+  selector:
+    app: brand
+  ports:
+    - name: brand
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
+      
+      
+      
+      
+      
+      
+      
+      

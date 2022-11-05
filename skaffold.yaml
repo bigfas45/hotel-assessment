@@ -1,0 +1,56 @@
+apiVersion: skaffold/v2alpha3
+kind: Config
+deploy:
+  kubectl:
+    manifests:
+      - ./infra/k8s/*
+      - ./infra/k8s-dev/*
+build:
+  local:
+    push: false
+  # googleCloudBuild:
+  #   projectId: v-box-318815
+  artifacts:
+    - image: dimejifash45/brand
+      context: brand
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
+    - image: dimejifash45/hotel
+      context: hotel
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
+    - image: dimejifash45/client
+      context: client
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: '**/*.js'
+            dest: .
+
+
+
+  
+
+            
+            
+            
+            
+            
+            
+            
+            
+            
+
+            
+        
+        
+            
